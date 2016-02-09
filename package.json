@@ -27,16 +27,11 @@
     "text"
   ],
   "dependencies": {
-    "canvas": "*",
-    "finalhandler": "*",
-    "serve-static": "*"
+    "canvas": "*"
   },
   "devDependencies": {
   },
   "preferGlobal": true,
-  "private": true,
-  "publishConfig": {
-  },
-  "subdomain": "foobar"
+  "private": true
 }
   

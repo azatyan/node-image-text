@@ -3,8 +3,7 @@ var http = require('http');
 var fs = require('fs');
 var Canvas = require('canvas');
 var Url = require('url');
-var finalhandler = require('finalhandler');
-var serveStatic = require('serve-static');
+var readableStream = require('readable-stream');
 
 var Image = Canvas.Image;
 
@@ -14,20 +13,44 @@ var fontsize = '20';
 var wordperline = 6;
 var image = __dirname + '/images/image.png';
 
-var serve = serveStatic("./");
-http.createServer(function(req, res) {
-    var done = finalhandler(req, res);
-    serve(req, res, done);
-}).listen(3000);
+
+/**
+ * @param response
+ * @param file_path
+ */
+function serveImage(response, file_path){
+    fs.createReadStream(file_path).pipe(response)
+}
 
 
-var server = http.createServer(function (request, response) {
+/**
+ * @param request
+ * @returns {Array}
+ */
+function getText(request){
     var text = Url.parse(request.url, true).query.text;
     if(typeof text == 'undefined'){
         text = 'Text not defined'
     };
+
     text = text.split(' ');
 
+    var temp_array = [];
+    var texts = [];
+    for (var i = 0; i < text.length; i++) {
+        temp_array.push(text[i]);
+        if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
+            texts.push(temp_array.join(' '));
+            temp_array = []
+        }
+    };
+
+    return texts;
+}
+
+var server = http.createServer(function (request, response) {
+
+    var text = getText(request);
     var name = Math.floor(Math.random() * 60000000) + 1000000;
     name = 'public/' + name + '.png';
 
@@ -37,20 +60,9 @@ var server = http.createServer(function (request, response) {
         img.src = squid;
         ctx.drawImage(img, 0, 0, img.width, img.height);
         ctx.stroke();
-        var temp_array = [];
-        var texts = [];
-        for (var i = 0; i < text.length; i++) {
-            temp_array.push(text[i]);
-            if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
-                texts.push(temp_array.join(' '));
-                temp_array = []
-            }
-        }
-        ;
-
         ctx.font = fontsize + 'px Open Sans';
         ctx.fillStyle = 'rgb(16,176,230)';
-
+        var texts = getText(request);
         for (var i = 0; i < texts.length; i++) {
             ctx.fillText(texts[i], 80, 130 + (i * 40))
         }
@@ -64,10 +76,8 @@ var server = http.createServer(function (request, response) {
         });
 
         stream.on('end', function () {
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            response.end('<img src="http://localhost:3000/' + name + '" />')
+            serveImage(response, name)
         })
     })
 });
-
 server.listen(8000);
