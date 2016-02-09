@@ -11,7 +11,11 @@ var Canvas = require('canvas')
   	var fontsize = "20";
   	var wordperline = 6;
   	var image = __dirname + '/images/image.png';
-	var text = "node-canvas extends the canvas API to provide interfacing with node, for example streaming PNG data, converting to a Buffer instance, etc. A";
+
+  	var http = require('http');
+
+	var server = http.createServer(function (request, response) {
+	var text = require('url').parse(request.url,true).query.text;
 	var name = Math.floor(Math.random() * 60000000) + 1000000;
 	name = 'public/'+name +".png";
 
@@ -35,7 +39,7 @@ var Canvas = require('canvas')
 	};
 
 	ctx.font = fontsize+'px Open Sans';
-	ctx.strokeStyle = 'rgba(240, 240, 240, 1)';
+	ctx.strokeStyle = 'rgba(0,0,255,1)';
 
 	for(var i = 0; i < texts.length; i++){
 		ctx.fillText(texts[i], 80, 130+(i*40));
@@ -49,6 +53,11 @@ var Canvas = require('canvas')
 	});
 
 	stream.on('end', function(){
-	  console.log('saved png');
+	  	  response.writeHead(200, {"Content-Type": "text/html"});
+	  response.end("<img src='/"+name+"' />");
 	});
-		});
+});
+	});
+
+// Listen on port 8000, IP defaults to 127.0.0.1
+server.listen(8000);
