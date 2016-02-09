@@ -1,0 +1,38 @@
+{
+  "name": "image-text",
+  "version": "1.0.0",
+  "description": "Text to Image Node App",
+  "author": "Tigran Azatyan <tigran@azatyan.info>",
+  "contributors": [{
+  "name": "Tigran Azatyan",
+  "email": "tigran@azatyan.info"
+}],
+  "bin": {
+
+},
+  "scripts": {
+  },
+  "main": "app.js",
+  "repository": {
+  "type": "git",
+  "url": "https://github.com/azatyan/node-image-text.git"
+},
+  "bugs": {
+  "url": "https://github.com/azatyan/node-image-text/issues"
+},
+  "keywords": [
+  "nodejs",
+  "image",
+  "text"
+],
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "preferGlobal": true,
+  "private": true,
+  "publishConfig": {
+},
+  "subdomain": "foobar"
+}
+  
