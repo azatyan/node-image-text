@@ -3,6 +3,9 @@ var http = require('http');
 var fs = require('fs');
 var Canvas = require('canvas');
 var Url = require('url');
+var finalhandler = require('finalhandler');
+var serveStatic = require('serve-static');
+
 var Image = Canvas.Image;
 
 var canvas = new Canvas(600, 400);
@@ -10,6 +13,13 @@ var ctx = canvas.getContext('2d');
 var fontsize = '20';
 var wordperline = 6;
 var image = __dirname + '/images/image.png';
+
+var serve = serveStatic("./");
+http.createServer(function(req, res) {
+    var done = finalhandler(req, res);
+    serve(req, res, done);
+}).listen(3000);
+
 
 var server = http.createServer(function (request, response) {
     var text = Url.parse(request.url, true).query.text;
@@ -55,7 +65,7 @@ var server = http.createServer(function (request, response) {
 
         stream.on('end', function () {
             response.writeHead(200, {'Content-Type': 'text/html'});
-            response.end('<img src="/' + name + '" />')
+            response.end('<img src="http://localhost:3000/' + name + '" />')
         })
     })
 });
