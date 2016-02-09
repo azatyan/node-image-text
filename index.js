@@ -1,59 +1,63 @@
-'use strict'
-var http = require('http')
-var fs = require('fs')
-var Canvas = require('canvas')
-var Url = require('url')
-var Image = Canvas.Image
+'use strict';
+var http = require('http');
+var fs = require('fs');
+var Canvas = require('canvas');
+var Url = require('url');
+var Image = Canvas.Image;
 
-var canvas = new Canvas(600, 400)
-var ctx = canvas.getContext('2d')
-var fontsize = '20'
-var wordperline = 6
-var image = __dirname + '/images/image.png'
+var canvas = new Canvas(600, 400);
+var ctx = canvas.getContext('2d');
+var fontsize = '20';
+var wordperline = 6;
+var image = __dirname + '/images/image.png';
 
 var server = http.createServer(function (request, response) {
-  var text = Url.parse(request.url, true).query.text
-  var name = Math.floor(Math.random() * 60000000) + 1000000
-  name = 'public/' + name + '.png'
+    var text = Url.parse(request.url, true).query.text;
+    if(typeof text == 'undefined'){
+        text = 'Text not defined'
+    };
+    text = text.split(' ');
 
-  fs.readFile(image, function (err, squid) {
-    if (err) throw err
-    var img = new Image()
-    img.src = squid
-    ctx.drawImage(img, 0, 0, img.width, img.height)
-    ctx.stroke()
+    var name = Math.floor(Math.random() * 60000000) + 1000000;
+    name = 'public/' + name + '.png';
 
-    text = text.split(' ')
-    var temparray = []
-    var texts = []
-    for (let i = 0; i < text.length; i++) {
-      temparray.push(text[i])
-      if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
-        texts.push(temparray.join(' '))
-        temparray = []
-      }
-    }
+    fs.readFile(image, function (err, squid) {
+        if (err) throw err;
+        var img = new Image();
+        img.src = squid;
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        ctx.stroke();
+        var temp_array = [];
+        var texts = [];
+        for (var i = 0; i < text.length; i++) {
+            temp_array.push(text[i]);
+            if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
+                texts.push(temp_array.join(' '));
+                temp_array = []
+            }
+        }
+        ;
 
-    ctx.font = fontsize + 'px Open Sans'
-    ctx.strokeStyle = 'rgba(0,0,255,1)'
+        ctx.font = fontsize + 'px Open Sans';
+        ctx.fillStyle = 'rgb(16,176,230)';
 
-    for (let i = 0; i < texts.length; i++) {
-      ctx.fillText(texts[i], 80, 130 + (i * 40))
-    }
-    ctx.stroke()
+        for (var i = 0; i < texts.length; i++) {
+            ctx.fillText(texts[i], 80, 130 + (i * 40))
+        }
+        ctx.stroke();
 
-    var out = fs.createWriteStream(name)
-    var stream = canvas.pngStream()
+        var out = fs.createWriteStream(name);
+        var stream = canvas.pngStream();
 
-    stream.on('data', function (chunk) {
-      out.write(chunk)
+        stream.on('data', function (chunk) {
+            out.write(chunk)
+        });
+
+        stream.on('end', function () {
+            response.writeHead(200, {'Content-Type': 'text/html'});
+            response.end('<img src="/' + name + '" />')
+        })
     })
+});
 
-    stream.on('end', function () {
-      response.writeHead(200, {'Content-Type': 'text/html'})
-      response.end('<img src="/' + name + '" />')
-    })
-  })
-})
-
-server.listen(8000)
+server.listen(8000);
