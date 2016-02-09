@@ -10,13 +10,6 @@ var canvas = new Canvas(600, 400);
 var ctx = canvas.getContext('2d');
     ctx.fileStyle = 'rgb(16,176,230)';
     ctx.font = '20px Open Sans';
-/**
- * @param response
- * @param file_path
- */
-function serveImage(response, file_path){
-    fs.createReadStream(file_path).pipe(response)
-}
 
 /**
  * @param request
@@ -40,9 +33,7 @@ function getText(request){
     return texts;
 }
 
-var server = http.createServer(function (request, response) {
-    var name = Math.floor(Math.random() * 60000000) + 1000000;
-    name = 'public/' + name + '.png';
+function createImage(name, request, response){
     fs.readFile(bg, function (err, squid) {
         if (err) throw err;
         var img = new Image();
@@ -62,8 +53,14 @@ var server = http.createServer(function (request, response) {
             out.write(chunk)
         });
         stream.on('end', function () {
-            serveImage(response, name)
+            fs.createReadStream(name).pipe(response);
         })
     })
+}
+
+var server = http.createServer(function (request, response) {
+    var name = Math.floor(Math.random() * 60000000) + 1000000;
+    name = 'public/' + name + '.png';
+    createImage(name,request,response);
 });
 server.listen(8000);
