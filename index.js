@@ -15,8 +15,7 @@ var ctx = canvas.getContext('2d');
  * @param request
  * @returns {Array}
  */
-function getText(request){
-    var text = Url.parse(request.url, true).query.text;
+function getText(text){
     if(typeof text == 'undefined'){
         text = 'Text not defined'
     };
@@ -40,27 +39,23 @@ function createImage(name, request, response){
         img.src = squid;
         ctx.drawImage(img, 0, 0, img.width, img.height);
         ctx.stroke();
-        var texts = getText(request);
+        var texts = getText(Url.parse(request.url, true).query.text);
         for (var i = 0; i < texts.length; i++) {
             ctx.fillText(texts[i], 80, 130 + (i * 40))
         }
         ctx.stroke();
 
         var out = fs.createWriteStream(name);
-        var stream = canvas.pngStream();
 
-        stream.on('data', function (chunk) {
+        canvas.pngStream().on('data', function (chunk) {
             out.write(chunk)
-        });
-        stream.on('end', function () {
+        }).on('end', function () {
             fs.createReadStream(name).pipe(response);
         })
     })
 }
 
-var server = http.createServer(function (request, response) {
-    var name = Math.floor(Math.random() * 60000000) + 1000000;
-    name = 'public/' + name + '.png';
+http.createServer(function (request, response) {
+    var name = 'public/' + Math.floor(Math.random() * 60000000) + '.png';
     createImage(name,request,response);
-});
-server.listen(8000);
+}).listen(8000);
