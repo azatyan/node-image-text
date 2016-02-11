@@ -11,22 +11,16 @@ var ctx = canvas.getContext('2d');
     ctx.fileStyle = 'rgb(16,176,230)';
     ctx.font = '20px Open Sans';
 
-/**
- * @param request
- * @returns {Array}
- */
-function getText(text){
-    if(typeof text == 'undefined'){
-        text = 'Text not defined'
-    };
+function getText(textParam){
+    var text = textParam || 'Text not defined';
     text = text.split(' ');
-    var temp_array = [];
+    var tempArray = [];
     var texts = [];
     for (var i = 0; i < text.length; i++) {
-        temp_array.push(text[i]);
+        tempArray.push(text[i]);
         if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
-            texts.push(temp_array.join(' '));
-            temp_array = []
+            texts.push(tempArray.join(' '));
+            tempArray = []
         }
     };
     return texts;
@@ -44,7 +38,6 @@ function createImage(name, request, response){
             ctx.fillText(texts[i], 80, 130 + (i * 40))
         }
         ctx.stroke();
-
         var out = fs.createWriteStream(name);
 
         canvas.pngStream().on('data', function (chunk) {
