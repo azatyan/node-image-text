@@ -26,9 +26,8 @@ function getText(textParam){
     return texts;
 }
 
-function createImage(name, request, response){
+function createImage(request, response){
     fs.readFile(bg, function (err, squid) {
-        if (err) throw err;
         var img = new Image();
         img.src = squid;
         ctx.drawImage(img, 0, 0, img.width, img.height);
@@ -38,17 +37,9 @@ function createImage(name, request, response){
             ctx.fillText(texts[i], 80, 130 + (i * 40))
         }
         ctx.stroke();
-        var out = fs.createWriteStream(name);
-
-        canvas.pngStream().on('data', function (chunk) {
-            out.write(chunk)
-        }).on('end', function () {
-            fs.createReadStream(name).pipe(response);
-        })
+        response.end(canvas.toBuffer());
     })
 }
-
 http.createServer(function (request, response) {
-    var name = 'public/' + Math.floor(Math.random() * 60000000) + '.png';
-    createImage(name,request,response);
+    createImage(request,response);
 }).listen(8000);
