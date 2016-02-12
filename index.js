@@ -58,7 +58,6 @@ function createImage (background, text, cb) {
     img.src = squid
     var canvas = new Canvas(img.width, img.height)
     var ctx = canvas.getContext('2d')
-    ctx.fileStyle = '#f66'
     ctx.font = '' + fontSize + 'px Open Sans'
     ctx.drawImage(img, 0, 0, img.width, img.height)
     ctx.stroke()
