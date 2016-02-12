@@ -83,6 +83,7 @@ http.createServer(function (request, response) {
     console.log('Text: ' + text)
     var background = __dirname + '/image.png'
     createImage(background, text, function (buf) {
+      response.setHeader('Content-Type', 'image/png')
       response.end(buf)
     })
   }
