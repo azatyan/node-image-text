@@ -1,44 +1,90 @@
-'use strict';
-var http = require('http');
-var fs = require('fs');
-var Canvas = require('canvas');
-var Url = require('url');
-var Image = Canvas.Image;
-var wordperline = 6;
-var canvas = new Canvas(600, 400);
-var ctx = canvas.getContext('2d');
-    ctx.fileStyle = 'rgb(16,176,230)';
-    ctx.font = '20px Open Sans';
+'use strict'
+var http = require('http')
+var fs = require('fs')
+var Canvas = require('canvas')
+var Url = require('url')
+var Image = Canvas.Image
 
-function getText(textParam){
-    var text = textParam || 'Text not defined';
-    text = text.split(' ');
-    var tempArray = [];
-    var texts = [];
-    for (var i = 0; i < text.length; i++) {
-        tempArray.push(text[i]);
-        if (i > 0 && (i % wordperline === 0 || i + 1 === text.length)) {
-            texts.push(tempArray.join(' '));
-            tempArray = []
-        }
-    };
-    return texts;
+function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
+  var words = text.split(' ')
+  var lines = []
+  let k = ''
+  let i = 0
+
+  words.map((word, i) => {
+    if (word.length > maxCharsPetLine) {
+      let half = maxCharsPetLine - 2
+      words.splice(i, 1,
+        word.substring(0, half) + '-',
+        word.substring(half)
+      )
+    }
+  })
+
+  words.map(word => {
+    if ((k + word).length > maxCharsPetLine) {
+      lines.push(k)
+      k = ''
+      i = 0
+    }
+
+    k += word + ' '
+    i++
+    if (i > 0 && i % wordperline === 0) {
+      lines.push(k)
+      k = ''
+      i = 0
+    }
+  })
+
+  if (k !== '') {
+    lines.push(k)
+  }
+  return lines
 }
 
-function createImage(url){
-    fs.readFile(__dirname + '/image.png', function (err, squid) {
-        var img = new Image();
-        img.src = squid;
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        ctx.stroke();
-        var texts = getText(Url.parse(url, true).query.text);
-        for (var i = 0; i < texts.length; i++) {
-            ctx.fillText(texts[i], 80, 130 + (i * 40))
-        }
-        ctx.stroke();
-        return canvas.toBuffer();
+function createImage (background, text, cb) {
+  var wordperline = 5
+  var maxCharsPetLine = 30
+  var fontSize = 30
+
+  fs.readFile(background, function (err, squid) {
+    if (err) {
+      console.log(err)
+      return null
+    }
+
+    var img = new Image()
+    img.src = squid
+    var canvas = new Canvas(img.width, img.height)
+    var ctx = canvas.getContext('2d')
+    ctx.fileStyle = '#f66'
+    ctx.font = '' + fontSize + 'px Open Sans'
+    ctx.drawImage(img, 0, 0, img.width, img.height)
+    ctx.stroke()
+
+    var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
+    texts.map((text, i) => {
+      let left = Math.max(0, parseInt((img.width - text.length * (fontSize - 15)) / 2, 10))
+      ctx.fillText(text, left, 140 + (i * 40))
     })
+
+    ctx.stroke()
+    return cb(canvas.toBuffer())
+  })
 }
+
 http.createServer(function (request, response) {
-    response.end(createImage(request.url));
-}).listen(8000);
+  var textMaxLength = 200
+  var text = Url.parse(request.url, true).query.text
+  if (!text || text === '') {
+    return response.write('No Text')
+  } else {
+    text = text.substring(0, textMaxLength)
+    console.log('Text: ' + text)
+    var background = __dirname + '/image.png'
+    createImage(background, text, function (buf) {
+      response.end(buf)
+    })
+  }
+}).listen(8000)
