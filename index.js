@@ -3,7 +3,6 @@ var http = require('http')
 var fs = require('fs')
 var Canvas = require('canvas')
 var Url = require('url')
-var Image = Canvas.Image
 
 function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
   var words = text.split(' ')
@@ -54,7 +53,7 @@ function createImage (background, text, cb) {
       return null
     }
 
-    var img = new Image()
+    var img = new Canvas.Image()
     img.src = squid
     var canvas = new Canvas(img.width, img.height)
     var ctx = canvas.getContext('2d')
