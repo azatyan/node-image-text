@@ -78,7 +78,7 @@ http.createServer(function (request, response) {
   var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
   if (!text || text === '') {
-    return response.write('No Text')
+    response.end('No Text')
   } else {
     text = text.substring(0, textMaxLength)
     console.log('Text: ' + text)
