@@ -61,6 +61,7 @@ function createImage (background, text, cb) {
     ctx.font = '' + fontSize + 'px Open Sans'
     ctx.drawImage(img, 0, 0, img.width, img.height)
     ctx.stroke()
+    ctx.fillStyle = '#1da1f2';
 
     var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
     texts.map((text, i) => {
