@@ -6,6 +6,7 @@ var Url = require('url')
 var color = "#ffffff";
 
 function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
+  text = text.split(',').join(', ');
   var words = text.split(' ')
   var lines = []
   let k = ''
@@ -46,7 +47,7 @@ function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
 function createImage (background, text, cb) {
   var wordperline = 5
   var maxCharsPetLine = 50
-  var fontSize = 30
+  var fontSize = 26
 
   fs.readFile(background, function (err, squid) {
     if (err) {
@@ -65,8 +66,7 @@ function createImage (background, text, cb) {
 
     var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
     texts.map((text, i) => {
-      let left = Math.max(0, parseInt((img.width - text.length * (fontSize - 15)) / 2, 10))
-      ctx.fillText(text, left, 80 + (i * 40))
+      ctx.fillText(text, 100, 60 + (i * 40))
     })
 
     ctx.stroke()
