@@ -78,9 +78,8 @@ http.createServer(function (request, response) {
   var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
   var image = parseInt(Url.parse(request.url, true).query.image) || 1
-  if (!text || text === '' || image > 8) {
-
-    fs.readFile(__dirname+'/index.html', function (err, html) {
+  if (!text || text === '' || image > 8 || image < 1) {
+    fs.readFile(__dirname+'/views/index.html', function (err, html) {
       response.setHeader('Content-Type', 'text/html');
       response.end(html)
     });

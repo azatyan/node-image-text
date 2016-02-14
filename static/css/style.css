@@ -1,0 +1,29 @@
+body {
+    background: rgba(204, 204, 204, 0.12);
+}
+
+.iradio_minimal-red {
+    top: -60px;
+    background-color: #d5d1d1 !important;
+    border-radius: 10px;
+}
+
+img {
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+textarea {
+    resize: none;
+    margin: 1px 0px 1px 30px;
+    width: 94.5% !important;
+}
+
+.btn-creator {
+    padding: 20px 20px;
+    font-size: 20px;
+}
