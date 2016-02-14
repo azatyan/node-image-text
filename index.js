@@ -45,7 +45,7 @@ function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
 
 function createImage (background, text, cb) {
   var wordperline = 5
-  var maxCharsPetLine = 30
+  var maxCharsPetLine = 50
   var fontSize = 30
 
   fs.readFile(background, function (err, squid) {
@@ -66,7 +66,7 @@ function createImage (background, text, cb) {
     var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
     texts.map((text, i) => {
       let left = Math.max(0, parseInt((img.width - text.length * (fontSize - 15)) / 2, 10))
-      ctx.fillText(text, left, 140 + (i * 40))
+      ctx.fillText(text, left, 80 + (i * 40))
     })
 
     ctx.stroke()
@@ -77,7 +77,7 @@ function createImage (background, text, cb) {
 http.createServer(function (request, response) {
   var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
-  var image = parseInt(Url.parse(request.url, true).query.image)
+  var image = parseInt(Url.parse(request.url, true).query.image) || 1
   if (!text || text === '') {
 
     fs.readFile(__dirname+'/index.html', function (err, html) {
