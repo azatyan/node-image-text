@@ -3,6 +3,7 @@ var http = require('http')
 var fs = require('fs')
 var Canvas = require('canvas')
 var Url = require('url')
+var color = "#ffffff";
 
 function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
   var words = text.split(' ')
@@ -60,7 +61,7 @@ function createImage (background, text, cb) {
     ctx.font = '' + fontSize + 'px Open Sans'
     ctx.drawImage(img, 0, 0, img.width, img.height)
     ctx.stroke()
-    ctx.fillStyle = '#1da1f2';
+    ctx.fillStyle = color;
 
     var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
     texts.map((text, i) => {
@@ -77,11 +78,15 @@ http.createServer(function (request, response) {
   var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
   if (!text || text === '') {
-    response.end('No Text')
+
+    fs.readFile(__dirname+'/index.html', function (err, html) {
+      response.setHeader('Content-Type', 'text/html');
+      response.end(html)
+    });
   } else {
     text = text.substring(0, textMaxLength)
     console.log('Text: ' + text)
-    var background = __dirname + '/image.png'
+    var background = __dirname + '/bg/1.jpg'
     createImage(background, text, function (buf) {
       response.setHeader('Content-Type', 'image/png')
       response.end(buf)
