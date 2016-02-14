@@ -1,36 +1,120 @@
 <html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>Cover generator</title>
-        <meta property="og:image" content="http://covergenerator.startupers.in/?text=Facebook+Cover+Generator">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+<head>
+    <meta charset="utf-8"/>
+    <title>Cover generator</title>
+    <meta property="og:image" content="http://covergenerator.startupers.in/?text=Facebook+Cover+Generator">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                    m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-            ga('create', 'UA-5200506-27', 'auto');
-            ga('send', 'pageview');
+        ga('create', 'UA-5200506-27', 'auto');
+        ga('send', 'pageview');
 
-        </script>
-    </head>
-    <body>
-    <div class="container">
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="jumbotron">
-                <h1>Enter text to <strog>Create Cover</strog></h1>
-                <form target="_blank" action="" method="get" class="form">
-                    <textarea name="text" class="input-lg form-control" placeholder="What's on your mind?" type="text"></textarea>
-                    <br />
-                    <input value="Create cover" type="submit" class="btn-lg btn btn-default"/>
-                </form>
-        </div>
+    </script>
+</head>
+<body>
+<div class="container">
+    <br/>
+    <br/>
+
+    <div class="jumbotron text-center">
+        <h2>Enter text to
+            <strog>Create Cover</strog>
+        </h2>
+        <form target="_blank" action="" method="get" class="form">
+            <textarea name="text" class="input-lg form-control" placeholder="What's on your mind?"
+                      type="text"></textarea>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/1.jpg"/>
+                        <br/>
+                        <input value="1" name="image" type="radio"/>
+                    </label>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/2.jpg"/>
+                        <br/>
+                        <input value="2" name="image" type="radio"/>
+                    </label>
+
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/3.jpg"/>
+                        <br/>
+                        <input value="3" name="image" type="radio"/>
+                    </label>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/4.jpg"/>
+                        <br/>
+                        <input value="4" name="image" type="radio"/>
+                    </label>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/5.jpg"/>
+                        <br/>
+                        <input checked value="5" name="image" type="radio"/>
+                    </label>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/6.jpg"/>
+                        <br/>
+                        <input value="6" name="image" type="radio"/>
+                    </label>
+
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/7.jpg"/>
+                        <br/>
+                        <input value="7" name="image" type="radio"/>
+                    </label>
+                </div>
+
+                <div class="col-md-3 text-center">
+                    <label>
+                        <img width="200" height="100" src="bg/8.jpg"/>
+                        <br/>
+                        <input value="8" name="image" type="radio"/>
+                    </label>
+                </div>
+            </div>
+            <p class="text-center">
+                <input value="Create cover" type="submit" class="btn-lg btn btn-primary"/>
+                <br/>
+
+            </p>
+        </form>
     </div>
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    </body>
+</div>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="js/app.js"></script>
+</body>
 </html>

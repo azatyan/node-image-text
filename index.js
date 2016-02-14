@@ -77,6 +77,7 @@ function createImage (background, text, cb) {
 http.createServer(function (request, response) {
   var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
+  var image = parseInt(Url.parse(request.url, true).query.image)
   if (!text || text === '') {
 
     fs.readFile(__dirname+'/index.html', function (err, html) {
@@ -84,12 +85,12 @@ http.createServer(function (request, response) {
       response.end(html)
     });
   } else {
-    text = text.substring(0, textMaxLength)
-    console.log('Text: ' + text)
-    var background = __dirname + '/bg/1.jpg'
-    createImage(background, text, function (buf) {
-      response.setHeader('Content-Type', 'image/png')
-      response.end(buf)
-    })
+      text = text.substring(0, textMaxLength)
+      console.log('Text: ' + text)
+      var background = __dirname + '/static/bg/'+image+'.jpg'
+      createImage(background, text, function (buf) {
+          response.setHeader('Content-Type', 'image/png')
+          response.end(buf)
+      })
   }
 }).listen(8000)
