@@ -7,7 +7,7 @@ jQuery(function($){
         if($("textarea").val()==''){
             return alert('Fill the text please!')
         } else {
-            $("#myModal").modal('show');
+            $("#coverDownload").modal('show');
             var val ="/?text="+$("textarea").val()+"&image="+$("input[name=image]:checked").val();
             $("#image").attr("src",val);
             $("#link").attr("href",val);
