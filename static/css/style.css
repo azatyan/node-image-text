@@ -27,3 +27,7 @@ textarea {
     padding: 20px 20px;
     font-size: 20px;
 }
+
+#image {
+    max-height: 500px;
+}

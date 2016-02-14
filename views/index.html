@@ -104,12 +104,26 @@
                 </div>
             </div>
             <p class="text-center">
-                <input value="CREATE COVER" type="submit" class="btn-creator btn btn-primary"/>
-                <br/>
-
+                <a id="create" href="#myModal" class="btn-creator btn btn-primary">CREATE COVER</a>
             </p>
         </form>
     </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+        <div style="width: 880px;height: 400px;" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    Modal Preview
+                </div>
+                <div class="modal-body">
+                    <img id="image" width="851" src="#"/>
+                </div>
+                <div class="modal-footer">
+                    <a class="btn btn-success pull-left" id="link" href="" download>Download PNG</a>
+                    <a data-dismiss="modal" href="#" class="btn btn-primary pull-right">Change Image Or Text</a>
+                </div>
+            </div>
+        </div>
 </div>
 <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
