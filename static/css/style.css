@@ -31,3 +31,8 @@ textarea {
 #image {
     max-height: 500px;
 }
+
+.select {
+    width: 200px;
+    margin: 16px 0px 0px 45px;
+}

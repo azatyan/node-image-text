@@ -3,18 +3,17 @@ var http = require('http')
 var fs = require('fs')
 var Canvas = require('canvas')
 var Url = require('url')
-var color = "#ffffff";
 
-function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
-  text = text.split(',').join(', ');
+function divideTextIntoLines (text, wordPerLine, maxCharsPerLine) {
+  text = text.split(',').join(', ').split('.').join('. ');
   var words = text.split(' ')
   var lines = []
   let k = ''
   let i = 0
 
   words.map((word, i) => {
-    if (word.length > maxCharsPetLine) {
-      let half = maxCharsPetLine - 2
+    if (word.length > maxCharsPerLine) {
+      let half = maxCharsPerLine - 2
       words.splice(i, 1,
         word.substring(0, half) + '-',
         word.substring(half)
@@ -23,7 +22,7 @@ function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
   })
 
   words.map(word => {
-    if ((k + word).length > maxCharsPetLine) {
+    if ((k + word).length > maxCharsPerLine) {
       lines.push(k)
       k = ''
       i = 0
@@ -31,7 +30,7 @@ function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
 
     k += word + ' '
     i++
-    if (i > 0 && i % wordperline === 0) {
+    if (i > 0 && i % wordPerLine === 0) {
       lines.push(k)
       k = ''
       i = 0
@@ -44,17 +43,12 @@ function divideTextIntoLines (text, wordperline, maxCharsPetLine) {
   return lines
 }
 
-function createImage (background, text, cb) {
-  var wordperline = 5
+function createImage (background, text, color, cb) {
+  var wordPerLine = 5
   var maxCharsPetLine = 50
   var fontSize = 26
 
   fs.readFile(background, function (err, squid) {
-    if (err) {
-      console.log(err)
-      return null
-    }
-
     var img = new Canvas.Image()
     img.src = squid
     var canvas = new Canvas(img.width, img.height)
@@ -64,7 +58,7 @@ function createImage (background, text, cb) {
     ctx.stroke()
     ctx.fillStyle = color;
 
-    var texts = divideTextIntoLines(text, wordperline, maxCharsPetLine)
+    var texts = divideTextIntoLines(text, wordPerLine, maxCharsPetLine)
     texts.map((text, i) => {
       ctx.fillText(text, 100, 60 + (i * 40))
     })
@@ -75,7 +69,6 @@ function createImage (background, text, cb) {
 }
 
 http.createServer(function (request, response) {
-  var textMaxLength = 200
   var text = Url.parse(request.url, true).query.text
   var image = parseInt(Url.parse(request.url, true).query.image) || 1
   if (!text || text === '' || image > 8 || image < 1) {
@@ -84,9 +77,16 @@ http.createServer(function (request, response) {
       response.end(html)
     });
   } else {
+      var textMaxLength = 200;
       text = text.substring(0, textMaxLength)
       var background = __dirname + '/static/bg/'+image+'.jpg'
-      createImage(background, text, function (buf) {
+      var color = Url.parse(request.url,true).query.color;
+      if(!color || color == '') {
+          color = "#ffffff";
+      } else {
+          color = "#"+color;
+      };
+      createImage(background, text, color, function (buf) {
           response.setHeader('Content-Type', 'image/png')
           response.end(buf)
       })
